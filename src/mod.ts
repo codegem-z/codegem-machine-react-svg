@@ -14,7 +14,9 @@ export default function generateReactSvg({
   replaceAttrValues,
 }: Options) {
   return (source: any[]) => {
-    console.log(source[0].filesInfo[0]);
+    // console.log(source[0].filesInfo[0]);
+
+    let indexExportCode = '';
 
     const result = source[0].filesInfo
       .filter((it: FileInfoType) => {
@@ -28,6 +30,9 @@ export default function generateReactSvg({
         const generatedFileName = `${svgName}_${svgStyle}`;
         // 导出的默认组件名 ActivityFilled
         const exportComponentName = toHump(generatedFileName);
+
+        // index 里代码 : export {default as } from './icons/'
+        indexExportCode += `export {default as ${exportComponentName}} from './icons/${generatedFileName}';\n`;
 
         const svgCode = fs.readFileSync(fileInfo.path, 'utf-8');
         try {
@@ -47,7 +52,7 @@ export default function generateReactSvg({
           );
 
           return {
-            pathname: path.resolve(output, `${generatedFileName}.tsx`),
+            pathname: path.resolve(output, `./icons/${generatedFileName}.tsx`),
             code: jsCode,
           };
         } catch (error) {
@@ -56,7 +61,13 @@ export default function generateReactSvg({
 
         return [];
       });
-    return result;
+    return [
+      ...result,
+      {
+        pathname: output,
+        code: indexExportCode,
+      },
+    ];
   };
 }
 
