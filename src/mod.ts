@@ -32,7 +32,7 @@ export default function generateReactSvg({
         const exportComponentName = toHump(generatedFileName);
 
         // index 里代码 : export {default as } from './icons/'
-        indexExportCode += `export {default as ${exportComponentName}} from './icons/${generatedFileName}';\n`;
+        indexExportCode += `export { default as ${exportComponentName} } from './icons/${generatedFileName}';\n`;
 
         const svgCode = fs.readFileSync(fileInfo.path, 'utf-8');
         try {
