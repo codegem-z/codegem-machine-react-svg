@@ -64,7 +64,7 @@ export default function generateReactSvg({
     return [
       ...result,
       {
-        pathname: output,
+        pathname: path.resolve(output, './index.tsx'),
         code: indexExportCode,
       },
     ];
